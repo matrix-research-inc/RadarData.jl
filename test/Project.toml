@@ -1,0 +1,6 @@
+[deps]
+DSP = "717857b8-e6f2-59f4-9121-6e50c889abd2"
+FFTW = "7a1cc6ca-52ef-59f5-83cd-3a7055c09341"
+RadarData = "d8ecf537-26b2-4b6a-83c8-385f3b036fff"
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+Aqua = "4c88cf16-eb10-579e-8560-4a9242c79595"

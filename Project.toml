@@ -1,14 +1,32 @@
 name = "RadarData"
 uuid = "179efde5-523a-4e94-b938-cf88fd67abfc"
-authors = ["Sam Pine <sam.pine@matrixresearch.com> and contributors"]
-version = "0.0.1"
+authors = ["Sam Pine <sam.pine@matrixresearch.com>", "Andrew Homan <andrew.homan@matrixresearch.com>"]
+version = "0.6.4"
+
+[deps]
+DSP = "717857b8-e6f2-59f4-9121-6e50c889abd2"
+Dates = "ade2ca70-3891-5945-98fb-dc099432e06a"
+DocStringExtensions = "ffbed154-4ef7-542d-bbb7-c09d3a79fcae"
+FFTW = "7a1cc6ca-52ef-59f5-83cd-3a7055c09341"
+Geodesy = "0ef565a4-170c-5f04-8de2-149903a85f3d"
+KernelAbstractions = "63c18a36-062a-441e-b654-da1e3ab1ce7c"
+KernelHelper = "8dd631bb-8ecc-42e1-a06a-3797c8042f81"
+LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
+Printf = "de0858da-6303-5e67-8744-51eddeeeb8d7"
+Rotations = "6038ab10-8711-5258-84ad-4b1120ba62dc"
+StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
+StatsBase = "2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91"
+
+[weakdeps]
+BEVE = "e4b2c2d1-1234-5678-9abc-123456789abc"
+MAT = "23992714-dd62-5051-b70f-ba57cb901cac"
+SoulHardware = "c4308f6f-568a-47bc-a83f-205ff2436bd7"
+SoulINS = "2c56d5bd-7041-4e74-8cea-f4ed15bf95df"
+
+[extensions]
+MTR = "MAT"
+SoulExt = ["SoulHardware", "SoulINS", "BEVE"]
+TSC = "MAT"
 
 [compat]
 julia = "1.12.4"
-
-[extras]
-Aqua = "4c88cf16-eb10-579e-8560-4a9242c79595"
-Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
-
-[targets]
-test = ["Aqua", "Test"]

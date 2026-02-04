@@ -1,5 +1,34 @@
+#=
+    License ID: SEAL_B
+=#
 module RadarData
 
-# Write your package code here.
+using StaticArrays: SVector, SMatrix
+using StatsBase: mean
+using FFTW: fftshift, fft, fft!, ifftshift, ifft, ifft!
+using DSP: unwrap
+using Geodesy: ECEF, ENU, LLA, wgs84, wgs84_ellipsoid
+using Rotations: RotXYZ, RotZX, QuatRotation
+using LinearAlgebra
+using Printf
+using DocStringExtensions
+using KernelAbstractions
+using KernelHelper
 
-end
+"""
+    c0 = 299792458
+
+Speed of light in a vaccuum, expressed in meters per second
+"""
+const c0 = 299792458
+export c0   # Speed of light (m/s)
+
+include("fft_shortcuts.jl")
+include("coordinates.jl")
+include("pnt.jl")
+include("vph.jl")
+include("motion_compensate.jl")
+include("test_data.jl")
+include("range_compress.jl")
+
+end # module RadarData

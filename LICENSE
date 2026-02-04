@@ -1,21 +1,18 @@
-MIT License
+############################################################################################
+SEAL B License
+############################################################################################
 
-Copyright (c) 2026 Sam Pine <sam.pine@matrixresearch.com> and contributors
+DISTRIBUTION STATEMENT B: Distribution authorized to U.S. Government agencies only; 
+Proprietary Information (SBIR Data Rights); May 2024.  
+Refer other requests for this document to 
+AFRL/RYMS, Wright-Patterson Air Force Base, OH 45433-7320.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+SBIR DATA RIGHTS:
+Contract Number:  FA2377-24-C-B023  
+Contractor Name: Matrix Research, Inc.  
+Contractor Address: 3844 Research Blvd, Beavercreek, Ohio 45430
+ 
+Expiration of SBIR Data Rights Period: 20 May 2044
+The Government's rights to use, modify, reproduce, release, perform, display, or disclose technical data or computer software marked with this legend are restricted during the period shown as provided in paragraph (b)(4) of the Rights in Noncommercial Technical Data and Computer Software—Small Business Innovation Research (SBIR) Program clause contained in the above identified contract.
+No restrictions apply after the expiration date shown above. 
+Any reproduction of technical data, computer software, or portions thereof marked with this legend must also reproduce the markings.
