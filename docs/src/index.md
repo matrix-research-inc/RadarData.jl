@@ -196,7 +196,3 @@ velocity_axis
 ## Index
 ```@index
 ```
-
-```@autodocs
-Modules = [RadarData]
-```
