@@ -1,7 +1,7 @@
 name = "RadarData"
 uuid = "179efde5-523a-4e94-b938-cf88fd67abfc"
-authors = ["Sam Pine <sam.pine@matrixresearch.com>", "Andrew Homan <andrew.homan@matrixresearch.com>"]
 version = "0.6.4"
+authors = ["Sam Pine <sam.pine@matrixresearch.com>", "Andrew Homan <andrew.homan@matrixresearch.com>"]
 
 [deps]
 DSP = "717857b8-e6f2-59f4-9121-6e50c889abd2"
@@ -29,4 +29,20 @@ SoulExt = ["SoulHardware", "SoulINS", "BEVE"]
 TSC = "MAT"
 
 [compat]
+BEVE = "0"
+DSP = "0"
+Dates = "1"
+DocStringExtensions = "0"
+FFTW = "1"
+Geodesy = "1"
+KernelAbstractions = "0"
+KernelHelper = "0"
+LinearAlgebra = "1"
+MAT = "0"
+Printf = "1"
+Rotations = "1"
+SoulHardware = "0"
+SoulINS = "0"
+StaticArrays = "1"
+StatsBase = "0"
 julia = "1.12.4"
