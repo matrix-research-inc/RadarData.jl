@@ -72,7 +72,6 @@ Conversion functions are in `src/coordinates.jl` and `src/pnt.jl`.
 - **Speed of light**: Effective speed `c_eff_ms` accounts for atmospheric propagation
   - Default vacuum speed available as constant `c0 = 299792458` m/s
 - **FFT convention**: Controlled by `kernel_sign` field (default -1)
-- **License headers**: All source files include `#= License ID: SEAL_B =#` header
 
 ## Development Notes
 
