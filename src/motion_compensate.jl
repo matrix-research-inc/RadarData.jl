@@ -10,32 +10,32 @@ export phase_to_range, range_to_phase, motion_compensate!, motion_compensate
 
 Convert phase in radians to range in meters.
 """
-phase_to_range(phase::Vector, center_freq::Real, c_eff_ms::Real) =
-    (c_eff_ms / center_freq / 2 / pi) .* phase
+phase_to_range(phase::Vector, center_freq::Real, c_eff_ms::Real) = (c_eff_ms / center_freq /
+                                                                    2 / pi) .* phase
 
 """
     phase_to_range(phase, vph)
 
 Convert phase in radians to range in meters.
 """
-phase_to_range(phase::Vector, vph::VPH) =
-    phase_to_range(phase, center_freq(vph), vph.c_eff_ms)
+phase_to_range(phase::Vector, vph::VPH) = phase_to_range(
+    phase, center_freq(vph), vph.c_eff_ms)
 
 """
     range_to_phase(phase, center_freq, c_eff_ms)
 
 Convert range in meters to phase in radians.
 """
-range_to_phase(range::Vector, center_freq::Real, c_eff_ms::Real) =
-    (2 * pi * center_freq / c_eff_ms) .* range
+range_to_phase(range::Vector, center_freq::Real, c_eff_ms::Real) = (2 * pi * center_freq /
+                                                                    c_eff_ms) .* range
 
 """
     range_to_phase(phase, vph)
 
 Convert range in meters to phase in radians.
 """
-range_to_phase(range::Vector, vph::VPH) =
-    range_to_phase(range, center_freq(vph), vph.c_eff_ms)
+range_to_phase(range::Vector, vph::VPH) = range_to_phase(
+    range, center_freq(vph), vph.c_eff_ms)
 
 """
 	motion_compensate(data_matrix, k_list, range_list; kernel_sign = -1)
@@ -43,20 +43,20 @@ range_to_phase(range::Vector, vph::VPH) =
 Apply circular shift motion compensation directly to phase history data matrix.
 """
 function motion_compensate!(
-    data::Matrix,
-    k_list::Vector{Float64},
-    range_list::Vector{Float64};
-    kernel_sign = -1
+        data::Matrix,
+        k_list::Vector{Float64},
+        range_list::Vector{Float64};
+        kernel_sign = -1
 )
-    data[:, :] .*= cis(kernel_sign .* k_list .* range_list')
+    data[:, :] .*= cis.(kernel_sign .* k_list .* range_list')
     return nothing
 end
 
 """
 	motion_compensate!(vph, k_list, range_list)
 
-Multiply `vph` by `exp( -ikr )` where `k` is drawn from `k_list` and `r` is drawn from `range_list`. 
-This implements a circular shift of `-r` in the range direction of the range / slowtime data corresponding to `vph`. 
+Multiply `vph` by `exp( -ikr )` where `k` is drawn from `k_list` and `r` is drawn from `range_list`.
+This implements a circular shift of `-r` in the range direction of the range / slowtime data corresponding to `vph`.
 Note that `range_list` is the two-way range, so users correcting monostatic data will need to account for this in `range_list`.
 """
 function motion_compensate!(vph::VPH, k_list::Vector{Float64}, range_list::Vector{Float64})
