@@ -12,7 +12,7 @@
         julia --project=docs -e '
         using Pkg
         Pkg.Registry.add()  # Add general package registry first
-        Pkg.Registry.add(Pkg.RegistrySpec(url="https://git.matrixresearch.com/Programs/alg/julia/julia_registry"))''
+        Pkg.Registry.add(Pkg.RegistrySpec(url="https://git.matrixresearch.com/Programs/alg/julia/julia_registry"))'
 
 .script:
   script:
