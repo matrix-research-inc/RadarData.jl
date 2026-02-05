@@ -7,6 +7,12 @@
       - echo "https://gitlab-ci-token:$CI_JOB_TOKEN@git.matrixresearch.com" > ~/.git-credentials
       - git config --global credential.helper store
       - export JULIA_PKG_USE_CLI_GIT=true
+      # Add Matrix package registry 
+      - | 
+      julia --project=docs -e '
+        using Pkg
+        Pkg.Registry.add()  # Add general package registry first
+        Pkg.Registry.add(Pkg.RegistrySpec(url="https://git.matrixresearch.com/Programs/alg/julia/julia_registry"))''
 
 .script:
   script:
