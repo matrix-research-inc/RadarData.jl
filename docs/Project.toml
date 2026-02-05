@@ -1,3 +1,4 @@
 [deps]
+DocStringExtensions = "ffbed154-4ef7-542d-bbb7-c09d3a79fcae"
 Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
-RadarData = "179efde5-523a-4e94-b938-cf88fd67abfc"
+RadarData = "d8ecf537-26b2-4b6a-83c8-385f3b036fff"
