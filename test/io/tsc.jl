@@ -38,4 +38,4 @@ image_grid = downsample(image_grid, [4, 2])
 tsc_bp = zeros(eltype(tsc_vph), size(image_grid))
 @time backproject!(tsc_bp, image_grid, tsc_vph)
 
-save_image("tsc_bp.png", hist_adaptive_scale(tsc_bp))
+save_image("tsc_bp.png", hist_adaptive_remap(tsc_bp))
