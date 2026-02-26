@@ -32,9 +32,9 @@ export VPH,
     bp_layover_projection
 
 """
-Video Phase History data structure. 
+    Video Phase History data structure.
 
-Each column represents a single pulse of returned data, which has been range-compressed. 
+Each column represents a single pulse of returned data, which has been range-compressed.
 The columns may represent either frequency or fast-time data, according to the value of `range_domain`.
 Data may be either ComplexF32 or ComplexF64, but position and timing metadata will be retained at Float64 precision.
 
@@ -205,7 +205,7 @@ range_res(vph::VPH) = range_res(bandwidth(vph), vph.c_eff_ms)
 
 """
 	velocity_res(center_freq)
-	
+
 Given `center_freq` in Hz, compute two-way velocity resolution in meters per pulse.
 """
 velocity_res(center_freq, num_pulses, c_eff = c0) = c_eff / center_freq / num_pulses
@@ -226,7 +226,7 @@ range_axis(range_step, num_bins) = fft_spacing(num_bins) * range_step
 
 """
     range_axis(vph)
-    
+
 Compute range axis (two-way meters) of range-Doppler image formed from VPH.
 """
 range_axis(vph::VPH) = range_axis(range_res(vph), size(vph, 1))
@@ -241,14 +241,14 @@ fast_time_axis(vph::VPH) = range_axis(vph) / c0
 """
 	velocity_axis(vel_step, num_bins)
 
-Compute velocity axis (m/pulse) of range-Doppler image formed from VPH. 
+Compute velocity axis (m/pulse) of range-Doppler image formed from VPH.
 """
 velocity_axis(vel_step, num_bins) = fft_spacing(num_bins) * vel_step
 
 """
 	velocity_axis(vph)
 
-Compute velocity axis (m/pulse) of range-Doppler image formed from VPH. 
+Compute velocity axis (m/pulse) of range-Doppler image formed from VPH.
 """
 velocity_axis(vph::VPH) = velocity_axis(velocity_res(vph), size(vph, 2))
 
@@ -334,7 +334,7 @@ function cross_range_dir_enu(vph::VPH)
     # Find remaining axis
     fact = LinearAlgebra.svd(bisec)
     cross_range_dir = fact.U[:, 1]
-    # Make sure the vector is pointing towards positive velocity 
+    # Make sure the vector is pointing towards positive velocity
     rel_pos = cross_range_dir' * bisec
     if mean(diff(vec(rel_pos))) < 0
         cross_range_dir .*= -1
@@ -479,7 +479,7 @@ end
 """
     extract_cpi(vph, cpi_idxs)
 
-Extract a sub-VPH from the given pulse indices. 
+Extract a sub-VPH from the given pulse indices.
 This is sometimes referred to as a Coherent Processing Interval (CPI).
 """
 function extract_cpi(vph::VPH, cpi_idxs::AbstractVector{Int})
