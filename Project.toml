@@ -29,7 +29,7 @@ SoulExt = ["SoulHardware", "SoulINS", "BEVE"]
 TSC = "MAT"
 
 [compat]
-BEVE = "0"
+BEVE = "2"
 DSP = "0"
 Dates = "1"
 DocStringExtensions = "0"
