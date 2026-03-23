@@ -1,6 +1,6 @@
 name = "RadarData"
 uuid = "d8ecf537-26b2-4b6a-83c8-385f3b036fff"
-version = "0.6.9"
+version = "0.6.10"
 authors = ["Sam Pine <sam.pine@matrixresearch.com>", "Andrew Homan <andrew.homan@matrixresearch.com>"]
 
 [deps]
