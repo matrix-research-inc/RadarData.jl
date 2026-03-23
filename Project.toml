@@ -29,7 +29,7 @@ SoulExt = ["SoulHardware", "SoulINS", "BEVE"]
 TSC = "MAT"
 
 [compat]
-BEVE = "2"
+BEVE = "1"
 DSP = "0"
 Dates = "1"
 DocStringExtensions = "0"
@@ -41,7 +41,7 @@ LinearAlgebra = "1"
 MAT = "0"
 Printf = "1"
 Rotations = "1"
-SoulHardware = "0"
+SoulHardware = "1"
 SoulINS = "0"
 StaticArrays = "1"
 StatsBase = "0"
