@@ -5,6 +5,7 @@ export ImagePlane,
        GROUND_PLANE,
        FIXED_EL_PLANE,
        SLANT_PLANE,
+       compute_vph_center,
        PFAKnots
 
 """
@@ -151,6 +152,33 @@ function compute_comp_poly(tx_poly::SMatrix{3, 3, Float64})
     dr0 = dot3(tx_poly, tx_poly[:, 2], 1) / r0
     ddr0 = (sum(abs2, tx_poly[:, 2]) + 2 * dot3(tx_poly, tx_poly[:, 3], 1) - dr0^2) / r0
     return SVector{3, Float64}(r0, dr0, ddr0)
+end
+
+"""
+    compute_vph_center(k_center, spatial_freqs, bisectors) -> Vector{Float64}
+
+Find VPH [frequency_index, pulse_index] corresponding to k-space center.
+Uses nonlinear optimization to match k_center with interpolated VPH bisector geometry.
+"""
+function compute_vph_center(
+        k_center::SVector{2, Float64},
+        spatial_freqs::Vector{Float64},
+        bisectors::Matrix{Float64}
+)
+    # k = 2 * pi * f / c0 * bisectors
+    start_freq = spatial_freqs[1]
+    delta_freq = spatial_freqs[2] - spatial_freqs[1]
+    # Interpolate bisectors
+    itp = interpolate(bisectors, (NoInterp(), BSpline(Cubic())))
+    # Initial guess
+    init = [length(spatial_freqs) / 2, size(bisectors, 2) / 2]
+    # Optimize frequency and slow time index
+    function residual(inds)
+        abs2.(k_center[1] - (start_freq + delta_freq * inds[1]) * itp(1, inds[2])) +
+        abs2.(k_center[2] - (start_freq + delta_freq * inds[2]) * itp(2, inds[2]))
+    end
+    results = optimize(residual, init)
+    return results.minimizer
 end
 
 """
