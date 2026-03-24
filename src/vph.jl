@@ -441,8 +441,8 @@ end
 Truncate frequency support of VPH to the range of frequencies specified by `start_freq_hz` and `stop_freq_hz`.
 """
 function freq_truncate!(vph::VPH, start_freq_hz::Real, stop_freq_hz::Real)
-    start_idx = findmin(x -> abs(x - start_freq_hz), obj.freq_list_hz)[2]
-    stop_idx = findmin(x -> abs(x - stop_freq_hz), obj.freq_list_hz)[2]
+    start_idx = findmin(x -> abs(x - start_freq_hz), vph.freq_list_hz)[2]
+    stop_idx = findmin(x -> abs(x - stop_freq_hz), vph.freq_list_hz)[2]
     freq_truncate!(vph, start_idx:stop_idx)
     return nothing
 end
@@ -470,8 +470,8 @@ end
 Truncate VPH in time, as indicated by start and stop times.
 """
 function time_truncate!(vph::VPH, start_time_s::Real, stop_time_s::Real)
-    start_idx = findmin(x -> abs(x - start_time_s), obj.slow_time_s)[2]
-    stop_idx = findmin(x -> abs(x - stop_time_s), obj.slow_time_s)[2]
+    start_idx = findmin(x -> abs(x - start_time_s), vph.slow_time_s)[2]
+    stop_idx = findmin(x -> abs(x - stop_time_s), vph.slow_time_s)[2]
     time_truncate!(vph, start_idx:stop_idx)
     return nothing
 end

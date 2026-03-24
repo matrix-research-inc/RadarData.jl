@@ -3,11 +3,12 @@
 =#
 module RadarData
 
-using StaticArrays: SVector, SMatrix
+using StaticArrays: SVector, SMatrix, MMatrix
 using StatsBase: mean
 using FFTW: fftshift, fft, fft!, ifftshift, ifft, ifft!
 using DSP: unwrap
 using Geodesy: ECEF, ENU, LLA, wgs84, wgs84_ellipsoid
+using Interpolations: interpolate, extrapolate, Gridded, Linear, NoInterp
 using Rotations: RotXYZ, RotZX, QuatRotation
 using LinearAlgebra
 using Printf
@@ -27,8 +28,9 @@ include("fft_shortcuts.jl")
 include("coordinates.jl")
 include("pnt.jl")
 include("vph.jl")
-include("motion_compensate.jl")
 include("test_data.jl")
 include("range_compress.jl")
+include("sar_image.jl")
+include("image_metadata.jl")
 
 end # module RadarData
