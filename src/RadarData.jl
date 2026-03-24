@@ -8,9 +8,10 @@ using StatsBase: mean
 using FFTW: fftshift, fft, fft!, ifftshift, ifft, ifft!
 using DSP: unwrap
 using Geodesy: ECEF, ENU, LLA, wgs84, wgs84_ellipsoid
-using Interpolations: interpolate, extrapolate, Gridded, Linear, NoInterp
+using Interpolations: interpolate, extrapolate, Gridded, Linear, NoInterp, Cubic, BSpline
 using Rotations: RotXYZ, RotZX, QuatRotation
 using LinearAlgebra
+using Optim: optimize
 using Printf
 using DocStringExtensions
 using KernelAbstractions
