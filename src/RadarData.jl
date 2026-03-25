@@ -14,8 +14,6 @@ using LinearAlgebra
 using Optim: optimize
 using Printf
 using DocStringExtensions
-using KernelAbstractions
-using KernelHelper
 
 """
     c0 = 299792458
@@ -29,7 +27,6 @@ include("fft_shortcuts.jl")
 include("coordinates.jl")
 include("pnt.jl")
 include("vph.jl")
-include("test_data.jl")
 include("range_compress.jl")
 include("sar_image.jl")
 include("image_metadata.jl")
