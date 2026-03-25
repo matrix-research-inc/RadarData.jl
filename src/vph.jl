@@ -2,34 +2,36 @@
     License ID: SEAL_B
 =#
 export VPH,
-    get_freq_list,
-    spatial_freqs,
-    bandwidth,
-    center_freq,
-    range_res,
-    velocity_res,
-    range_axis,
-    fast_time_axis,
-    velocity_axis,
-    time_axis,
-    doppler_axis,
-    cross_range_extent,
-    bistatic_angles,
-    bisectors,
-    vph_to_rs!,
-    vph_to_rs,
-    rs_to_vph!,
-    rs_to_vph,
-    freq_truncate!,
-    time_truncate!,
-    extract_cpi,
-    pri,
-    azimuth_rad,
-    elevation_rad,
-    horizon_coords,
-    range_dir_enu,
-    cross_range_dir_enu,
-    bp_layover_projection
+       get_freq_list,
+       spatial_freqs,
+       bandwidth,
+       center_freq,
+       range_res,
+       velocity_res,
+       range_axis,
+       fast_time_axis,
+       velocity_axis,
+       time_axis,
+       doppler_axis,
+       cross_range_extent,
+       bistatic_angles,
+       bisectors,
+       vph_to_rs!,
+       vph_to_rs,
+       rs_to_vph!,
+       rs_to_vph,
+       freq_truncate!,
+       time_truncate!,
+       freq_pad!,
+       range_pad!,
+       extract_cpi,
+       pri,
+       azimuth_rad,
+       elevation_rad,
+       horizon_coords,
+       range_dir_enu,
+       cross_range_dir_enu,
+       bp_layover_projection
 
 """
     Video Phase History data structure.
@@ -40,7 +42,7 @@ Data may be either ComplexF32 or ComplexF64, but position and timing metadata wi
 
 $(TYPEDFIELDS)
 """
-mutable struct VPH{T<:AbstractFloat}
+mutable struct VPH{T <: AbstractFloat}
     "Complex-valued data matrix, frequency (or fast-time / range) by slow-time"
     data::Matrix{Complex{T}}
     "Frequency list, in Hz"
@@ -58,7 +60,7 @@ mutable struct VPH{T<:AbstractFloat}
     "Position of (possibly shifting) scene reference point (ENU, meters)"
     srp_enu::Matrix{Float64}
     "Fixed scene reference position for ENU frame in latitude (deg), longitude (deg), altitude (m)"
-    srp_lla::SVector{3,Float64}
+    srp_lla::SVector{3, Float64}
     "FFT sign convention for transformation from frequency to fast-time domain, default is -1"
     kernel_sign::Float64
     "Effective speed of light (m/s)"
@@ -82,19 +84,19 @@ Keyword Arguments:
 - `range_domain = false`
 """
 VPH(
-    data::AbstractMatrix{Complex{T}},
-    freq_list_hz::AbstractVector,
-    ref_range_m::AbstractVector,
-    slow_time_s::AbstractVector,
-    tx_pos_enu::AbstractMatrix;
-    ref_time_s::Real = 0.0,
-    rx_pos_enu::AbstractMatrix = tx_pos_enu,
-    srp_enu::AbstractMatrix = zeros(3, 1),
-    srp_lla::AbstractVector = [39.729866; -84.077144; 0.0],
-    kernel_sign::Real = -1.0,
-    c_eff_ms::Real = Float64(c0),
-    range_domain::Bool = false
-) where {T<:AbstractFloat} = VPH(
+data::AbstractMatrix{Complex{T}},
+freq_list_hz::AbstractVector,
+ref_range_m::AbstractVector,
+slow_time_s::AbstractVector,
+tx_pos_enu::AbstractMatrix;
+ref_time_s::Real = 0.0,
+rx_pos_enu::AbstractMatrix = tx_pos_enu,
+srp_enu::AbstractMatrix = zeros(3, 1),
+srp_lla::AbstractVector = [39.729866; -84.077144; 0.0],
+kernel_sign::Real = -1.0,
+c_eff_ms::Real = Float64(c0),
+range_domain::Bool = false
+) where {T <: AbstractFloat} = VPH(
     convert(Matrix{Complex{T}}, data),
     convert(Vector{Float64}, freq_list_hz),
     convert(Vector{Float64}, ref_range_m),
@@ -103,7 +105,7 @@ VPH(
     convert(Matrix{Float64}, tx_pos_enu),
     convert(Matrix{Float64}, rx_pos_enu),
     convert(Matrix{Float64}, srp_enu),
-    convert(SVector{3,Float64}, srp_lla),
+    convert(SVector{3, Float64}, srp_lla),
     Float64(kernel_sign),
     Float64(c_eff_ms),
     range_domain
@@ -122,20 +124,22 @@ VPH(n_freqs::Int, n_pulses::Int) = VPH(
     zeros(3, n_pulses)
 )
 
-Base.convert(::Type{VPH{T2}}, vph::VPH{T1}) where {T1,T2<:AbstractFloat} = VPH(
-    convert(Matrix{Complex{T2}}, vph.data),
-    vph.freq_list_hz,
-    vph.ref_range_m,
-    vph.slow_time_s,
-    vph.ref_time_s,
-    vph.tx_pos_enu,
-    vph.rx_pos_enu,
-    vph.srp_enu,
-    vph.srp_lla,
-    vph.kernel_sign,
-    vph.c_eff_ms,
-    vph.range_domain
-)
+function Base.convert(::Type{VPH{T2}}, vph::VPH{T1}) where {T1, T2 <: AbstractFloat}
+    VPH(
+        convert(Matrix{Complex{T2}}, vph.data),
+        vph.freq_list_hz,
+        vph.ref_range_m,
+        vph.slow_time_s,
+        vph.ref_time_s,
+        vph.tx_pos_enu,
+        vph.rx_pos_enu,
+        vph.srp_enu,
+        vph.srp_lla,
+        vph.kernel_sign,
+        vph.c_eff_ms,
+        vph.range_domain
+    )
+end
 
 Base.size(vph::VPH) = size(vph.data)
 Base.size(vph::VPH, dims::Int) = size(vph.data, dims)
@@ -151,16 +155,17 @@ pri(vph::VPH) = mean(diff(vph.slow_time_s))
 """
 	get_freq_list(center_freq, bandwidth, num_freqs)
 """
-get_freq_list(center_freq, bandwidth, num_freqs) =
-    fft_spacing(num_freqs) * bandwidth / num_freqs .+ center_freq
+get_freq_list(center_freq, bandwidth, num_freqs) = fft_spacing(num_freqs) * bandwidth /
+                                                   num_freqs .+ center_freq
 
 """
 	spatial_freqs(freqs)
 
 For frequency `freqs` in Hz, return the spatial frequency `2πf/c`.
 """
-spatial_freqs(freqs::AbstractVector{T}, c_eff = c0) where {T<:AbstractFloat} =
-    T(2 * pi / c_eff) .* freqs
+spatial_freqs(freqs::AbstractVector{T}, c_eff = c0) where {T <: AbstractFloat} = T(2 * pi /
+                                                                                   c_eff) .*
+                                                                                 freqs
 
 """
     spatial_freqs(vph)
@@ -184,7 +189,7 @@ Return the bandwidth spanned by `VPH.freq_list_hz`.
 bandwidth(vph::VPH) = bandwidth(vph.freq_list_hz)
 
 """center_freq(freq_list_hz)"""
-center_freq(freq_list_hz) = freq_list_hz[div(length(freq_list_hz), 2)+1]
+center_freq(freq_list_hz) = freq_list_hz[div(length(freq_list_hz), 2) + 1]
 """center_freq(vph)"""
 center_freq(vph::VPH) = center_freq(vph.freq_list_hz)
 
@@ -311,10 +316,10 @@ Return a unit vector pointing towards the down-range direction, in ENU coordinat
 """
 function range_dir_enu(vph::VPH)
     center_pulse = fld(size(vph, 2), 2) + 1
-    unit_tx =
-        vph.tx_pos_enu[:, center_pulse] ./ sqrt(sum(abs2, vph.tx_pos_enu[:, center_pulse]))
-    unit_rx =
-        vph.rx_pos_enu[:, center_pulse] ./ sqrt(sum(abs2, vph.rx_pos_enu[:, center_pulse]))
+    unit_tx = vph.tx_pos_enu[:, center_pulse] ./
+              sqrt(sum(abs2, vph.tx_pos_enu[:, center_pulse]))
+    unit_rx = vph.rx_pos_enu[:, center_pulse] ./
+              sqrt(sum(abs2, vph.rx_pos_enu[:, center_pulse]))
     bisector = unit_tx .+ unit_rx
     bisector ./= sqrt(sum(abs2, bisector))
     return bisector
@@ -350,13 +355,12 @@ Only appropriate for approximately monostatic collections.
 """
 function bp_layover_projection(vph::VPH)
     cidx = fld(size(vph, 2), 2) + 1
-    mono_pos_enu =
-        0.5 .* (vph.tx_pos_enu[:, cidx.+(-1:1)] .+ vph.rx_pos_enu[:, cidx.+(-1:1)])
-    mono_velocity_enu =
-        (mono_pos_enu[:, 3] .- mono_pos_enu[:, 1]) ./
-        (vph.slow_time_s[cidx+1] - vph.slow_time_s[cidx-1])
+    mono_pos_enu = 0.5 .*
+                   (vph.tx_pos_enu[:, cidx .+ (-1:1)] .+ vph.rx_pos_enu[:, cidx .+ (-1:1)])
+    mono_velocity_enu = (mono_pos_enu[:, 3] .- mono_pos_enu[:, 1]) ./
+                        (vph.slow_time_s[cidx + 1] - vph.slow_time_s[cidx - 1])
     proj_vec = cross(mono_pos_enu[:, 2], mono_velocity_enu)
-    return SMatrix{3,3,Float64}(
+    return SMatrix{3, 3, Float64}(
         1,
         0,
         0,
@@ -477,6 +481,57 @@ function time_truncate!(vph::VPH, start_time_s::Real, stop_time_s::Real)
 end
 
 """
+    freq_pad!(vph, num_top, num_bottom = num_top)
+
+Zero-pad VPH in frequency domain, adding `num_top` frequency bins at the low end
+and `num_bottom` frequency bins at the high end.
+"""
+function freq_pad!(vph::VPH, num_top::Int, num_bottom::Int = num_top)
+    # Ensure we are working in frequency domain
+    rs_to_vph!(vph)
+
+    # Compute frequency step
+    freq_step = vph.freq_list_hz[2] - vph.freq_list_hz[1]
+
+    # Pad data with zeros
+    vph.data = vcat(
+        zeros(eltype(vph.data), num_top, size(vph.data, 2)),
+        vph.data,
+        zeros(eltype(vph.data), num_bottom, size(vph.data, 2))
+    )
+
+    # Extend frequency list
+    neg_freqs = vph.freq_list_hz[1] .+ ((-num_top):-1) .* freq_step
+    pos_freqs = vph.freq_list_hz[end] .+ (1:num_bottom) .* freq_step
+    vph.freq_list_hz = vcat(neg_freqs, vph.freq_list_hz, pos_freqs)
+    return nothing
+end
+
+"""
+    range_pad!(vph, num_top, num_bottom = num_top)
+
+Zero-pad VPH in range (fast-time) domain, adding `num_top` range bins at the top
+and `num_bottom` range bins at the bottom.
+"""
+function range_pad!(vph::VPH, num_top::Int, num_bottom::Int = num_top)
+    # Ensure we are working in range domain
+    vph_to_rs!(vph)
+
+    # Pad data with zeros in range dimension
+    vph.data = vcat(
+        zeros(eltype(vph.data), num_top, size(vph.data, 2)),
+        vph.data,
+        zeros(eltype(vph.data), num_bottom, size(vph.data, 2))
+    )
+
+    # Update frequency list
+    num_freqs_pad = size(vph.data, 1)
+    df_pad = bandwidth(vph) / num_freqs_pad
+    vph.freq_list_hz = center_freq(vph) .+ fft_spacing(num_freqs_pad) .* df_pad
+    return nothing
+end
+
+"""
     extract_cpi(vph, cpi_idxs)
 
 Extract a sub-VPH from the given pulse indices.
@@ -505,23 +560,21 @@ end
 
 Custom display method for VPH.
 """
-function Base.show(io::IO, vph::VPH{T}) where {T<:AbstractFloat}
+function Base.show(io::IO, vph::VPH{T}) where {T <: AbstractFloat}
     println(io, size(vph, 1), "x", size(vph, 2), " VPH{", T, "}:")
     println(
         io,
         "    data: ",
         size(vph.data),
-        @sprintf(
-            " [%.2f%+.2fim %.2f%+.2fim ... %.2f%+.2fim %.2f%+.2fim]",
+        @sprintf(" [%.2f%+.2fim %.2f%+.2fim ... %.2f%+.2fim %.2f%+.2fim]",
             real(vph.data[1]),
             imag(vph.data[1]),
             real(vph.data[2]),
             imag(vph.data[2]),
-            real(vph.data[end-1]),
-            imag(vph.data[end-1]),
+            real(vph.data[end - 1]),
+            imag(vph.data[end - 1]),
             real(vph.data[end]),
-            imag(vph.data[end])
-        )
+            imag(vph.data[end]))
     )
     println(
         io,
@@ -546,56 +599,48 @@ function Base.show(io::IO, vph::VPH{T}) where {T<:AbstractFloat}
         io,
         "    tx_pos_enu: ",
         size(vph.tx_pos_enu),
-        @sprintf(
-            " [%.2f %.2f %.2f] ... [%.2f %.2f %.2f]",
+        @sprintf(" [%.2f %.2f %.2f] ... [%.2f %.2f %.2f]",
             vph.tx_pos_enu[1, 1],
             vph.tx_pos_enu[2, 1],
             vph.tx_pos_enu[3, 1],
             vph.tx_pos_enu[1, end],
             vph.tx_pos_enu[2, end],
-            vph.tx_pos_enu[3, end]
-        )
+            vph.tx_pos_enu[3, end])
     )
     println(
         io,
         "    rx_pos_enu: ",
         size(vph.rx_pos_enu),
-        @sprintf(
-            " [%.2f %.2f %.2f] ... [%.2f %.2f %.2f]",
+        @sprintf(" [%.2f %.2f %.2f] ... [%.2f %.2f %.2f]",
             vph.rx_pos_enu[1, 1],
             vph.rx_pos_enu[2, 1],
             vph.rx_pos_enu[3, 1],
             vph.rx_pos_enu[1, end],
             vph.rx_pos_enu[2, end],
-            vph.rx_pos_enu[3, end]
-        )
+            vph.rx_pos_enu[3, end])
     )
     if size(vph.srp_enu, 2) > 1
         println(
             io,
             "    srp_enu: ",
             size(vph.srp_enu),
-            @sprintf(
-                " [%.2f %.2f %.2f] ... [%.2f %.2f %.2f]",
+            @sprintf(" [%.2f %.2f %.2f] ... [%.2f %.2f %.2f]",
                 vph.srp_enu[1, 1],
                 vph.srp_enu[2, 1],
                 vph.srp_enu[3, 1],
                 vph.srp_enu[1, end],
                 vph.srp_enu[2, end],
-                vph.srp_enu[3, end]
-            )
+                vph.srp_enu[3, end])
         )
     else
         println(
             io,
             "    srp_enu: ",
             size(vph.srp_enu),
-            @sprintf(
-                " [%.2f %.2f %.2f]",
+            @sprintf(" [%.2f %.2f %.2f]",
                 vph.srp_enu[1, 1],
                 vph.srp_enu[2, 1],
-                vph.srp_enu[3, 1]
-            )
+                vph.srp_enu[3, 1])
         )
     end
     println(
