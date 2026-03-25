@@ -19,6 +19,14 @@ The core data structure is Video Phase History (VPH), which represents range-com
 - `range_domain`: Boolean flag indicating if data is in frequency or range (fast-time) domain
 - Supports both ComplexF32 and ComplexF64 data, but position/timing metadata is always Float64
 
+**SARImage**: Georeferenced SAR image container (`src/sar_image.jl`)
+- `data`: Complex-valued image pixel data matrix
+- `row_axis`, `col_axis`: Pixel grid center locations (meters)
+- `srp_lla`: Scene reference point in LLA coordinates
+- `row_unit_vector`, `col_unit_vector`: ECEF unit vectors for image axes
+- Supports indexing to extract sub-images
+- Functions for coordinate transformations (ECEF, LLA, ENU)
+
 **PNT (Position, Navigation, Timing)**: Platform state information (`src/pnt.jl`)
 - `PVA`: Position, Velocity, Attitude message following ASPN convention
 - `PNTHistory`: Collection of PVA messages over time
@@ -30,10 +38,10 @@ The package is organized into focused modules included from `src/RadarData.jl`:
 - `coordinates.jl`: Coordinate system conversions (Cartesian ↔ horizon, azimuth/elevation, slant plane geometry)
 - `pnt.jl`: Position, navigation, timing structures and interpolation
 - `vph.jl`: Video Phase History structure and domain transformations
-- `motion_compensate.jl`: Phase/range conversions and motion compensation algorithms
+- `sar_image.jl`: SAR image container with georeferencing and coordinate transformations
+- `image_metadata.jl`: Metadata structures for SAR image formation (PFA knots, image planes)
 - `range_compress.jl`: Chirp synthesis and range compression operations
 - `fft_shortcuts.jl`: FFT utilities for radar processing
-- `test_data.jl`: Synthetic data generation for testing
 
 ### Package Extensions
 
