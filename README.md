@@ -8,6 +8,16 @@
 
 A [Julia](https://julialang.org/) package for handling synthetic aperture radar (SAR) data types.
 
+## Features
+
+- **Video Phase History (VPH)**: Core data structure for range-compressed radar pulse data
+- **SAR Image Format**: Georeferenced SAR image container with coordinate transformations
+- **Position, Navigation, Timing (PNT)**: Platform state management and interpolation
+- **Coordinate Transformations**: Support for ECEF, ENU, LLA, and horizon coordinate systems
+- **Range Compression**: Chirp synthesis and pulse compression utilities
+- **Polar Format Algorithm**: PFA metadata structures for SAR image formation
+- **Package Extensions**: Optional support for MTR legacy format, TSC format, and RFSoC hardware integration
+
 ## Installation
 
 We assume a functional Julia installation.

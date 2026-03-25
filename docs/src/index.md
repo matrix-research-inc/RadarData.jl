@@ -4,19 +4,20 @@ CurrentModule = RadarData
 
 # RadarData
 
-[RadarData](https://git.matrixresearch.com/Programs/alg/julia/RadarData.jl) provides data structures and utilities for working with synthetic aperture radar (SAR) data. 
-The package handles radar phase history data, position/navigation/timing (PNT) information, coordinate transformations, and motion compensation.
+[RadarData](https://git.matrixresearch.com/Programs/alg/julia/RadarData.jl) provides data structures and utilities for working with synthetic aperture radar (SAR) data.
+The package handles radar phase history data, SAR imagery, position/navigation/timing (PNT) information, and coordinate transformations.
 
 ## Overview
 
 The main components of RadarData.jl are:
 
 - **VPH (Video Phase History)**: Core data structure for radar returns
+- **SARImage**: Container for SAR image data with georeferencing
 - **PNT (Position, Navigation, Timing)**: Platform state information
 - **Coordinate Systems**: Transformations between ECEF, ENU, LLA, and horizon coordinates
-- **Motion Compensation**: Phase correction for platform motion
 - **Range Compression**: Pulse compression utilities
-- **Test Data Generation**: Synthetic data for algorithm development
+- **Image Metadata**: Structures for SAR image formation (PFA knots, image planes)
+- **FFT Utilities**: Convenience functions for FFT operations
 
 ## Constants
 
@@ -83,7 +84,7 @@ rs_to_vph(::VPH)
 
 ### VPH Data Selection
 
-Extract subsets of VPH data:
+Extract subsets and pad VPH data:
 
 ```@docs
 freq_truncate!(::VPH,::UnitRange{Int})
@@ -91,6 +92,29 @@ freq_truncate!(::VPH,::Real,::Real)
 time_truncate!(::VPH,::AbstractVector{Int})
 time_truncate!(::VPH,::Real,::Real)
 extract_cpi(::VPH, ::AbstractVector{Int})
+freq_pad!
+range_pad!
+```
+
+## SAR Image
+
+SAR images with georeferencing and metadata.
+
+### SARImage Type
+
+```@docs
+SARImage
+```
+
+### SARImage Functions
+
+```@docs
+resolution(::SARImage)
+srp_ecef(::SARImage)
+image_corners_ecef
+image_corners_lla
+enu_frame
+image_axes
 ```
 
 ## Position, Navigation, and Timing (PNT)
@@ -136,17 +160,6 @@ enu_rotation
 intersect_los_plane
 ```
 
-## Motion Compensation
-
-Correct for platform motion effects:
-
-```@docs
-phase_to_range
-range_to_phase
-motion_compensate!
-motion_compensate
-```
-
 ## Range Compression
 
 Pulse compression utilities:
@@ -158,13 +171,26 @@ range_compress
 range_compress!
 ```
 
-## Test Data Generation
+## Image Metadata
 
-Generate synthetic radar data for testing:
+Structures for SAR image formation and metadata.
+
+### Image Plane
 
 ```@docs
-ScatterCenters
-generate_vph
+ImagePlane
+GROUND_PLANE
+FIXED_EL_PLANE
+SLANT_PLANE
+```
+
+### PFA Knots
+
+Polar Format Algorithm metadata structure:
+
+```@docs
+PFAKnots
+compute_vph_center
 ```
 
 ## FFT Utilities
