@@ -5,18 +5,18 @@
 =#
 
 export PVA,
-    PVAHeader,
-    PNT,
-    PNTHistory,
-    receive_pva!,
-    interp_states,
-    interp_ecef,
-    range_to_point,
-    range_rate_to_point,
-    ned_to_enu,
-    body_to_ecef,
-    enu_rotation,
-    intersect_los_plane
+       PVAHeader,
+       PNT,
+       PNTHistory,
+       receive_pva!,
+       interp_states,
+       interp_ecef,
+       range_to_point,
+       range_rate_to_point,
+       ned_to_enu,
+       body_to_ecef,
+       enu_rotation,
+       intersect_los_plane
 
 """
 Position, Velocity, Attitude message header.
@@ -35,20 +35,20 @@ Corresponds to ASPN convention in `aspn_schema/measurement_position_velocity_att
 """
 struct PVA
     header::PVAHeader
-    position::SVector{3,Float64}
-    velocity::SVector{3,Float64}
-    attitude::SVector{3,Float64}
-    covariance::SMatrix{9,9,Float64}
+    position::SVector{3, Float64}
+    velocity::SVector{3, Float64}
+    attitude::SVector{3, Float64}
+    covariance::SMatrix{9, 9, Float64}
     time_of_validity::Float64
 end
 
 """
     Position, navigation, and timing data. Float64 was chosen to reduce precision errors in position and timing.
 
-    ecef = Earth-Centered, Earth-Fixed coordinate.
-    vel_enu_ms = Velocity of platform in local East-North-Up coordinates.
-    attitude = rotation of body frame relative to local NED coordinate frame.
-    time_s = Time of measurement, in seconds. Typically maintained relative to reference time.
+ecef = Earth-Centered, Earth-Fixed coordinate.
+vel_enu_ms = Velocity of platform in local East-North-Up coordinates.
+attitude = rotation of body frame relative to local NED coordinate frame.
+time_s = Time of measurement, in seconds. Typically maintained relative to reference time.
 """
 @kwdef struct PNT
     ecef::ECEF{Float64} = ECEF{Float64}(NaN, NaN, NaN)
@@ -71,10 +71,11 @@ function PNT(pva::PVA, ref_time_s::Float64 = 0.0)
 end
 
 """
-    PNT history maintains a buffer of previous `max_states` PNT states. 
-    `current_end` is an index indicating the last-stored state. 
-    When `current_end` exceeds `max_states`, `current_end` is reset to 1 and the buffer begins overwriting the oldest elements.
-    Also includes `ref_time_s`; all contained states are assumed to have `time_s` relative to this time.
+    PNT history maintains a buffer of previous `max_states` PNT states.
+
+`current_end` is an index indicating the last-stored state.
+When `current_end` exceeds `max_states`, `current_end` is reset to 1 and the buffer begins overwriting the oldest elements.
+Also includes `ref_time_s`; all contained states are assumed to have `time_s` relative to this time.
 """
 @kwdef mutable struct PNTHistory
     max_states::Int = 1000
@@ -143,7 +144,7 @@ function get_states(history::PNTHistory, time_start::Float64, time_end::Float64)
         # Need to increment by 1 to include the end time
         idx_e = mod1(idx_e + 1, history.max_states)
     end
-    # Keep going to capture start time 
+    # Keep going to capture start time
     while history[idx_s].time_s > time_start
         idx_s = mod1(idx_s - 1, history.max_states)
         if idx_s == ref
@@ -157,7 +158,7 @@ end
 """
     interp_states(history, time_s)
 
-Return best linearly interpolated estimate of state at the relative input time, in seconds. 
+Return best linearly interpolated estimate of state at the relative input time, in seconds.
 Assumes `time_s` is a single float or is sorted in increasing order.
 No extrapolation.
 """
@@ -204,14 +205,14 @@ function interp_ecef(history::PNTHistory, time_s::Vector{Float64})
         knot_times[:] = map(x -> x.time_s, history.states[idx_s:idx_e])
         knot_vals[:, :] = stack(x -> x.ecef, history.states[idx_s:idx_e])
     else
-        knot_times[1:history.max_states-idx_s+1] =
-            map(x -> x.time_s, history.states[idx_s:end])
-        knot_times[history.max_states-idx_s+2:end] =
-            map(x -> x.time_s, history.states[1:idx_e])
-        knot_vals[:, 1:history.max_states-idx_s+1] =
-            stack(x -> x.ecef, history.states[idx_s:end])
-        knot_vals[:, history.max_states-idx_s+2:end] =
-            stack(x -> x.ecef, history.states[1:idx_e])
+        knot_times[1:(history.max_states - idx_s + 1)] = map(
+            x -> x.time_s, history.states[idx_s:end])
+        knot_times[(history.max_states - idx_s + 2):end] = map(
+            x -> x.time_s, history.states[1:idx_e])
+        knot_vals[:, 1:(history.max_states - idx_s + 1)] = stack(
+            x -> x.ecef, history.states[idx_s:end])
+        knot_vals[:, (history.max_states - idx_s + 2):end] = stack(
+            x -> x.ecef, history.states[1:idx_e])
     end
 
     # Now interpolate
@@ -247,10 +248,9 @@ Compute one-way range (m) and one-way change in range (m/s) from PNT to ECEF coo
 function range_rate_to_point(pnt::PNT, ecef::ECEF{Float64})
     vel_ecef_ms = pnt.vel_ecef_ms
     range_to_pt = range_to_point(pnt, ecef)
-    vel_to_pt =
-        ((pnt.ecef[1] - ecef[1]) * vel_ecef_ms[1] +
-         (pnt.ecef[2] - ecef[2]) * vel_ecef_ms[2] +
-         (pnt.ecef[3] - ecef[3]) * vel_ecef_ms[3]) / range_to_pt
+    vel_to_pt = ((pnt.ecef[1] - ecef[1]) * vel_ecef_ms[1] +
+                 (pnt.ecef[2] - ecef[2]) * vel_ecef_ms[2] +
+                 (pnt.ecef[3] - ecef[3]) * vel_ecef_ms[3]) / range_to_pt
     return range_to_pt, vel_to_pt
 end
 
@@ -260,17 +260,16 @@ end
 Compute one-way range (m) and one-way change in range (m/s) from PNT to ENU coordinate.
 """
 function range_rate_to_point(
-    pnt::PNT,
-    enu::ENU{Float64},
-    ecef_ref::ECEF{Float64} = pnt.ecef
+        pnt::PNT,
+        enu::ENU{Float64},
+        ecef_ref::ECEF{Float64} = pnt.ecef
 )
     enu_pos = ENU(pnt.ecef, ecef_ref, wgs84)
-    range_to_pt =
-        sqrt((enu_pos[1] - enu[1])^2 + (enu_pos[2] - enu[2])^2 + (enu_pos[3] - enu[3])^2)
-    vel_to_pt =
-        ((enu_pos[1] - enu[1]) * pnt.vel_enu_ms[1] +
-         (enu_pos[2] - enu[2]) * pnt.vel_enu_ms[2] +
-         (enu_pos[3] - enu[3]) * pnt.vel_enu_ms[3]) / range_to_pt
+    range_to_pt = sqrt((enu_pos[1] - enu[1])^2 + (enu_pos[2] - enu[2])^2 +
+                       (enu_pos[3] - enu[3])^2)
+    vel_to_pt = ((enu_pos[1] - enu[1]) * pnt.vel_enu_ms[1] +
+                 (enu_pos[2] - enu[2]) * pnt.vel_enu_ms[2] +
+                 (enu_pos[3] - enu[3]) * pnt.vel_enu_ms[3]) / range_to_pt
     return range_to_pt, vel_to_pt
 end
 
@@ -279,7 +278,7 @@ end
 
 Convert North-East-Down coordinates to East-North-Up.
 """
-function ned_to_enu(ned::V) where {V<:AbstractVector{Float64}}
+function ned_to_enu(ned::V) where {V <: AbstractVector{Float64}}
     return ENU(ned[2], ned[1], -ned[3])
 end
 
@@ -288,7 +287,7 @@ end
 
 Convert body coordinates to ECEF orientations.
 """
-function body_to_ecef(body::V, pnt::PNT) where {V<:AbstractVector{Float64}}
+function body_to_ecef(body::V, pnt::PNT) where {V <: AbstractVector{Float64}}
     ned = pnt.attitude * body
     return ECEF(ned_to_enu(ned), pnt.ecef, wgs84) - pnt.ecef
 end
@@ -337,16 +336,16 @@ end
 """
     intersect_los_plane(body_los, pnt, ground_hae_m = 0)
 
-Compute intersection of line of sight vector relative to body frame with ENU plane 
-referenced to `pnt.ecef`, and return ENU coordinate. Ground plane is assumed to have 
+Compute intersection of line of sight vector relative to body frame with ENU plane
+referenced to `pnt.ecef`, and return ENU coordinate. Ground plane is assumed to have
 given height above ellipsoid (HAE).
 """
 function intersect_los_plane(
-    body_los::V,
-    pnt::PNT,
-    ground_hae_m::Float64 = 0.0
-) where {V<:AbstractVector{Float64}}
-    # convert body vector to ENU frame 
+        body_los::V,
+        pnt::PNT,
+        ground_hae_m::Float64 = 0.0
+) where {V <: AbstractVector{Float64}}
+    # convert body vector to ENU frame
     los_enu = ned_to_enu(pnt.attitude * body_los)
     # compute intersection with ground plane, assuming given HAE
     if los_enu[3] < 0
