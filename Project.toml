@@ -17,7 +17,7 @@ StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
 StatsBase = "2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91"
 
 [weakdeps]
-BEVE = "e4b2c2d1-1234-5678-9abc-123456789abc"
+BEVE = "3b80d964-188b-4b7e-ad00-66244565238b"
 Dates = "ade2ca70-3891-5945-98fb-dc099432e06a"
 MAT = "23992714-dd62-5051-b70f-ba57cb901cac"
 SoulHardware = "c4308f6f-568a-47bc-a83f-205ff2436bd7"
