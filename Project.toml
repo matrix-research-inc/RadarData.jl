@@ -25,7 +25,7 @@ SoulINS = "2c56d5bd-7041-4e74-8cea-f4ed15bf95df"
 
 [extensions]
 MTR = "MAT"
-SoulExt = ["SoulHardware", "SoulINS", "BEVE"]
+SoulExt = ["SoulHardware", "SoulINS", "BEVE", "Dates"]
 TSC = "MAT"
 
 [compat]
