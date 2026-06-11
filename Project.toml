@@ -25,11 +25,11 @@ SoulINS = "2c56d5bd-7041-4e74-8cea-f4ed15bf95df"
 
 [extensions]
 MTR = "MAT"
-SoulExt = ["SoulHardware", "SoulINS", "BEVE"]
+SoulExt = ["SoulHardware", "SoulINS", "BEVE", "Dates"]
 TSC = "MAT"
 
 [compat]
-BEVE = "1"
+BEVE = "2"
 DSP = "0"
 Dates = "1"
 DocStringExtensions = "0"
