@@ -1,6 +1,6 @@
 name = "RadarData"
 uuid = "d8ecf537-26b2-4b6a-83c8-385f3b036fff"
-version = "0.7.1"
+version = "0.7.2"
 authors = ["Sam Pine <sam.pine@matrixresearch.com>", "Andrew Homan <andrew.homan@matrixresearch.com>"]
 
 [deps]
@@ -17,21 +17,14 @@ StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
 StatsBase = "2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91"
 
 [weakdeps]
-BEVE = "3b80d964-188b-4b7e-ad00-66244565238b"
-Dates = "ade2ca70-3891-5945-98fb-dc099432e06a"
 MAT = "23992714-dd62-5051-b70f-ba57cb901cac"
-SoulHardware = "c4308f6f-568a-47bc-a83f-205ff2436bd7"
-SoulINS = "2c56d5bd-7041-4e74-8cea-f4ed15bf95df"
 
 [extensions]
 MTR = "MAT"
-SoulExt = ["SoulHardware", "SoulINS", "BEVE", "Dates"]
 TSC = "MAT"
 
 [compat]
-BEVE = "2"
 DSP = "0"
-Dates = "1"
 DocStringExtensions = "0"
 FFTW = "1"
 Geodesy = "1"
@@ -41,8 +34,6 @@ MAT = "0"
 Optim = "2"
 Printf = "1"
 Rotations = "1"
-SoulHardware = "2"
-SoulINS = "0"
 StaticArrays = "1"
 StatsBase = "0"
 julia = "1.12.4"
