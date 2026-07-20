@@ -1,6 +1,3 @@
-#=
-    License ID: SEAL_B
-=#
 module RadarData
 
 using StaticArrays: SVector, SMatrix, MMatrix

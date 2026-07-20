@@ -1,7 +1,5 @@
 #=
     Basic matched filtering routines for range compression.
-
-License ID: SEAL_B
 =#
 export synth_chirp, synth_chirp!, range_compress, range_compress!
 

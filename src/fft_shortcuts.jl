@@ -1,7 +1,5 @@
 #=
 	Shortcuts to common FFT-based methods
-
-	License ID: SEAL_B
 =#
 export fft_spacing, sfft, sifft, vph_to_rd, rd_to_vph
 

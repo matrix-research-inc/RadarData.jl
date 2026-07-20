@@ -1,6 +1,3 @@
-#=
-    License ID: SEAL_B
-=#
 export VPH,
        get_freq_list,
        spatial_freqs,
