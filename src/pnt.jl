@@ -1,7 +1,5 @@
 #=
     Structures for managing external Position, Navigation and Timing information
-
-    License ID: SEAL_B
 =#
 
 export PVA,

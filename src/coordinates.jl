@@ -1,7 +1,5 @@
 #=
 	Functions to assist with forming slant plane imagery, change coordinate systems.
-
-    License ID: SEAL_B
 =#
 export cart_to_horizon,
        cart_to_horizon_unwrap,
