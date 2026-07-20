@@ -1,7 +1,8 @@
 # RadarData
 
-[![Documentation](https://img.shields.io/badge/docs-vpn-blue.svg)](https://pages-git.matrixresearch.com/programs/alg/julia/radardata)
-[![Latest Release](https://git.matrixresearch.com/Programs/alg/julia/radardata/-/badges/release.svg)](https://git.matrixresearch.com/Programs/alg/julia/radardata/-/releases)
+[![Documentation](https://img.shields.io/badge/docs-public-blue.svg)]()
+[![Documentation](https://img.shields.io/badge/docs-internal-orange.svg)](https://pages-git.matrixresearch.com/programs/alg/julia/radardata)
+[![Latest Release](https://img.shields.io/github/v/release/matrix-research-inc/RadarData.jl)](https://github.com/matrix-research-inc/RadarData.jl/releases/tag/public-release-v0.7.1)
 [![Aqua](https://raw.githubusercontent.com/JuliaTesting/Aqua.jl/master/badge.svg)](https://github.com/JuliaTesting/Aqua.jl)
 
 A [Julia](https://julialang.org/) package for handling synthetic aperture radar (SAR) data types. 
