@@ -1,6 +1,6 @@
 # RadarData
 
-[![Documentation](https://img.shields.io/badge/docs-public-blue.svg)]()
+[![Documentation](https://img.shields.io/badge/docs-public-blue.svg)](https://matrix-research-inc.github.io/RadarData.jl/dev/)
 [![Documentation](https://img.shields.io/badge/docs-internal-orange.svg)](https://pages-git.matrixresearch.com/programs/alg/julia/radardata)
 [![Latest Release](https://img.shields.io/github/v/release/matrix-research-inc/RadarData.jl)](https://github.com/matrix-research-inc/RadarData.jl/releases/tag/public-release-v0.7.1)
 [![Aqua](https://raw.githubusercontent.com/JuliaTesting/Aqua.jl/master/badge.svg)](https://github.com/JuliaTesting/Aqua.jl)
