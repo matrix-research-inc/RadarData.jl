@@ -19,3 +19,7 @@ makedocs(;
         "Home" => "index.md"
     ]
 )
+
+deploydocs(
+    repo = "github.com/matrix-research-inc/RadarData.jl.git",
+)
