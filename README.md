@@ -29,9 +29,6 @@ Contact us for commercial licensing options.
 
 See the [LICENSE](LICENSE) file for full license text.
 
-This software is approved for public release. 
-See the [public release history](docs/public_release_history.md) for details.
-
 ## Contributing
 
 We welcome contributions! 
@@ -46,3 +43,8 @@ To get started or for questions about contributing, contact Sam Pine <sam.pine@m
 ## Support
 
 Please contact Sam Pine <sam.pine@matrixresearch.com> for support.
+
+## Acknowledgements
+The authors thank AFRL/Sensors Directorate for their support of this work via SBIR Contract FA2377-24-C-B023.
+This software is approved for public release. 
+See the [public release history](docs/public_release_history.md) for details.
